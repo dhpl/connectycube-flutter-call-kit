@@ -73,11 +73,11 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             result(voipToken)
         }
         else if(call.method == "updateConfig"){
-            let ringtone = arguments["ringtone"] as! String
-            let icon = arguments["icon"] as! String
-            CallKitController.updateConfig(ringtone: ringtone, icon: icon)
+            if let ringtone = arguments["ringtone"] as? String, let icon = arguments["icon"] as? String {
+                CallKitController.updateConfig(ringtone: ringtone, icon: icon)
+                result(true)
+            }
             
-            result(true)
         }
         else if(call.method == "showCallNotification"){
             let callId = arguments["session_id"] as! String
@@ -88,7 +88,7 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
             let callOpponents = callOpponentsString.components(separatedBy: ",")
                 .map { Int($0) ?? 0 }
             let userInfo = arguments["user_info"] as? String
-
+            
             SwiftConnectycubeFlutterCallKitPlugin.callController.reportIncomingCall(uuid: callId, callType: callType, callInitiatorId: callInitiatorId, callInitiatorName: callInitiatorName, opponents: callOpponents, userInfo: userInfo) { (error) in
                 print("[SwiftConnectycubeFlutterCallKitPlugin][handle] reportIncomingCall ERROR: \(error?.localizedDescription ?? "none")")
                 result(error == nil)
