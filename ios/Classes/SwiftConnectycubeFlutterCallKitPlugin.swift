@@ -67,7 +67,9 @@ public class SwiftConnectycubeFlutterCallKitPlugin: NSObject, FlutterPlugin {
     //TODO: remove these defaults and get as arguments
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         print("[SwiftConnectycubeFlutterCallKitPlugin][handle] method: \(call.method)");
-        let arguments = call.arguments as! Dictionary<String, Any>
+        guard let arguments = call.arguments as? Dictionary<String, Any> else {
+            result(false)
+        }
         if(call.method == "getVoipToken"){
             let voipToken = SwiftConnectycubeFlutterCallKitPlugin.voipController.getVoIPToken()
             result(voipToken)
